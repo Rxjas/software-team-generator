@@ -28,8 +28,8 @@ const start =([{
 const employeeRole =([{
     type: 'list',
     name: 'role',
-    message: 'What is the role of the Employee?',
-    choices: ['Engineer', 'Intern']
+    message: 'What is the role of the Employee you would like to add?',
+    choices: ['Engineer', 'Intern', 'Finished Adding Employees']
 }])
 
 const managerQs = ([
@@ -156,11 +156,43 @@ function createManager(){
     inquirer.prompt(managerQs)
         .then(entry => {
             const manager = new Manager(entry.name, entry.id, entry.email, entry.office);
-            employees.push(Manager);
-            console.log(manager, employees);
+            employees.push(manager);
+            addToTeam();
         })
+}
 
-        
+function createEngineer(){
+    inquirer.prompt(engineerQs)
+        .then(entry => {
+            const engineer = new Engineer(entry.name, entry.id, entry.email, entry.github);
+            employees.push(engineer);
+            addToTeam();
+        })
+}
+
+function createIntern(){
+    inquirer.prompt(internQs)
+        .then(entry => {
+            const intern = new Intern(entry.name, entry.id, entry.email, entry.school);
+            employees.push(intern);
+            addToTeam();
+        })
+}
+
+
+function addToTeam(){
+    inquirer.prompt(employeeRole)
+        .then(answer => {
+            if(answer.role === 'Engineer'){
+                createEngineer();
+            }
+            else if (answer.role === 'Intern'){
+                createIntern();
+            }
+            else{
+                return fs.writeFileSync(outputPath, render(employees), 'utf-8')
+            }
+        })
 }
 
 function init(){
