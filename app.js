@@ -12,9 +12,7 @@ const render = require("./lib/htmlRenderer");
 const Choices = require("inquirer/lib/objects/choices");
 
 //arrays to push the employees
-const arrayManagers = [];
-const arrayEngineers = [];
-const arrayInterns = [];
+var employees = [];
 
 
 // Write code to use inquirer to gather information about the development team members,
@@ -31,7 +29,7 @@ const employeeRole =([{
     type: 'list',
     name: 'role',
     message: 'What is the role of the Employee?',
-    choices: ['Manager', 'Engineer', 'Intern']
+    choices: ['Engineer', 'Intern']
 }])
 
 const managerQs = ([
@@ -114,6 +112,7 @@ const internQs = ([
 
 function createTeam(data){
     const role = data.role
+
     if(role === 'Manager'){
         inquirer.prompt(managerQs)
             .then(function(answer){
@@ -153,23 +152,29 @@ function createTeam(data){
     }
 }
 
+function createManager(){
+    inquirer.prompt(managerQs)
+        .then(entry => {
+            const manager = new Manager(entry.name, entry.id, entry.email, entry.office);
+            employees.push(Manager);
+            console.log(manager, employees);
+        })
+
+        
+}
+
 function init(){
     //question to initialize program
     inquirer.prompt(start)
         .then(function (data){
 
-            //Ask for the employee's role
-            if (data.start === 'Yes'){
-                inquirer.prompt(employeeRole)
-                    .then(function (data){
-                        createTeam(data);
-                    })
-            } 
-
-            //if the user chooses to not start the program
-            else{
-                console.log('Run Application When Ready')
-            };
+            if(data.start === 'Yes'){
+                createManager();
+            }else{
+                console.log('Please run application when ready.')
+            }
+        
+        
 
         })// end of start THEN
 }//end of init
