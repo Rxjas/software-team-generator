@@ -110,47 +110,6 @@ const internQs = ([
     }
 ]);
 
-function createTeam(data){
-    const role = data.role
-
-    if(role === 'Manager'){
-        inquirer.prompt(managerQs)
-            .then(function(answer){
-                const name = answer.name
-                const id = answer.id
-                const email = answer.email
-                const office = answer.office
-
-                let manager = new Manager(name, id, email, office);
-                console.log(manager)
-                // arrayManagers.push(manager);
-            })
-    } 
-    else if (role === 'Engineer'){
-        inquirer.prompt(engineerQs)
-            .then(function(answer){
-                const name = answer.name
-                const id = answer.id
-                const email = answer.email
-                const github = answer.github
-
-                let engineer = new Engineer(name, id, email, github);
-                arrayEngineers.push(engineer);
-            })
-    }
-    else if (role === 'Intern'){
-        inquirer.prompt(internQs)
-            .then(function(answer){
-                const name = answer.name
-                const id = answer.id
-                const email = answer.email
-                const school = answer.school
-
-                let intern = new Intern(name, id, email, school)
-                arrayInterns.push(intern);
-            })
-    }
-}
 
 function createManager(){
     inquirer.prompt(managerQs)
