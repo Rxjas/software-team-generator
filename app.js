@@ -122,11 +122,22 @@ function addManager(){
         });
 };
 
+function addEngineer(){
+    inquirer.prompt(engineerQs)
+        .then(function(ans){
+
+            let engineer = new Engineer(ans.name, ans.id, ans.email, ans.github);
+            employeeRole.push(engineer);
+            addEmployee();
+
+        });
+};
+
 function addEmployee(){
     inquirer.prompt(employeeRole)
         .then(function(ans){
             if (ans.role === 'Engineer'){
-                //create engineer
+                addEngineer();
             }
             else if (ans.role === 'Intern'){
                 //make an intern
