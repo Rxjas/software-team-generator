@@ -12,7 +12,7 @@ const render = require("./lib/htmlRenderer");
 const Choices = require("inquirer/lib/objects/choices");
 
 //arrays to push the employees
-var employees = [];
+const employeeArray = [];
 
 
 // Write code to use inquirer to gather information about the development team members,
@@ -23,13 +23,14 @@ const start =([{
     name: 'start',
     message: 'Would you like to begin the Software Team Generator?',
     choices: ['Yes', 'No']
-}]) 
+}
+]) 
 
 const employeeRole =([{
     type: 'list',
     name: 'role',
-    message: 'What is the role of the Employee you would like to add?',
-    choices: ['Engineer', 'Intern', 'Finished Adding Employees']
+    message: 'What is the role of the Employee?',
+    choices: ['Engineer', 'Intern', 'Finished Creating Team.']
 }])
 
 const managerQs = ([
@@ -110,62 +111,86 @@ const internQs = ([
     }
 ]);
 
-
-function createManager(){
+function addManager(){
     inquirer.prompt(managerQs)
-        .then(entry => {
-            const manager = new Manager(entry.name, entry.id, entry.email, entry.office);
-            employees.push(manager);
-            addToTeam();
-        })
-}
+        .then(function(ans){
 
-function createEngineer(){
-    inquirer.prompt(engineerQs)
-        .then(entry => {
-            const engineer = new Engineer(entry.name, entry.id, entry.email, entry.github);
-            employees.push(engineer);
-            addToTeam();
-        })
-}
+            let manager = new Manager(ans.name, ans.id, ans.email, ans.office);
+            employeeRole.push(manager);
+            addEmployee();
 
-function createIntern(){
-    inquirer.prompt(internQs)
-        .then(entry => {
-            const intern = new Intern(entry.name, entry.id, entry.email, entry.school);
-            employees.push(intern);
-            addToTeam();
-        })
-}
+        });
+};
 
-
-function addToTeam(){
+function addEmployee(){
     inquirer.prompt(employeeRole)
-        .then(answer => {
-            if(answer.role === 'Engineer'){
-                createEngineer();
+        .then(function(ans){
+            if (ans.role === 'Engineer'){
+                //create engineer
             }
-            else if (answer.role === 'Intern'){
-                createIntern();
+            else if (ans.role === 'Intern'){
+                //make an intern
             }
-            else{
-                return fs.writeFileSync(outputPath, render(employees), 'utf-8')
+            else {
+                return fs.writeFileSync(outputPath, render(employees), "utf-8");
             }
         })
+}
+
+
+function createTeam(data){
+    const role = data.role
+
+    if(role === 'Manager'){
+        inquirer.prompt(managerQs)
+            .then(function(answer){
+            
+                let manager = new Manager(name, id, email, office);
+                console.log(manager)
+                // arrayManagers.push(manager);
+            })
+    } 
+    else if (role === 'Engineer'){
+        inquirer.prompt(engineerQs)
+            .then(function(answer){
+                const name = answer.name
+                const id = answer.id
+                const email = answer.email
+                const github = answer.github
+
+                let engineer = new Engineer(name, id, email, github);
+                arrayEngineers.push(engineer);
+            })
+    }
+    else if (role === 'Intern'){
+        inquirer.prompt(internQs)
+            .then(function(answer){
+                const name = answer.name
+                const id = answer.id
+                const email = answer.email
+                const school = answer.school
+
+                let intern = new Intern(name, id, email, school)
+                arrayInterns.push(intern);
+            })
+    }
 }
 
 function init(){
+
     //question to initialize program
     inquirer.prompt(start)
         .then(function (data){
 
-            if(data.start === 'Yes'){
-                createManager();
-            }else{
-                console.log('Please run application when ready.')
-            }
-        
-        
+            // Ask for the employee's role
+            if (data.start === 'Yes'){
+                addManager(data);
+            } 
+
+            //if the user chooses to not start the program
+            else{
+                console.log('Run Application When Ready')
+            };
 
         })// end of start THEN
 }//end of init
