@@ -154,10 +154,12 @@ function addEmployee(){
                 return addIntern();
             }
             else {
-                return fs.writeFileSync(outputPath, render(employees), "utf-8");
-            }
+
+                console.log('Check the output folder for your team!')
+                return fs.writeFileSync(outputPath, render(employeeArray), "utf-8");
+            };
         })
-}
+};
 
 
 // function createTeam(data){
