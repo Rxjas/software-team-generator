@@ -116,7 +116,7 @@ function addManager(){
         .then(function(ans){
 
             let manager = new Manager(ans.name, ans.id, ans.email, ans.office);
-            employeeRole.push(manager);
+            employeeArray.push(manager);
             addEmployee();
 
         });
@@ -127,7 +127,18 @@ function addEngineer(){
         .then(function(ans){
 
             let engineer = new Engineer(ans.name, ans.id, ans.email, ans.github);
-            employeeRole.push(engineer);
+            employeeArray.push(engineer);
+            addEmployee();
+
+        });
+};
+
+function addIntern(){
+    inquirer.prompt(internQs)
+        .then(function(ans){
+
+            let intern = new Intern(ans.name, ans.id, ans.email, ans.school);
+            employeeArray.push(intern);
             addEmployee();
 
         });
@@ -137,10 +148,10 @@ function addEmployee(){
     inquirer.prompt(employeeRole)
         .then(function(ans){
             if (ans.role === 'Engineer'){
-                addEngineer();
+                return addEngineer();
             }
             else if (ans.role === 'Intern'){
-                //make an intern
+                return addIntern();
             }
             else {
                 return fs.writeFileSync(outputPath, render(employees), "utf-8");
@@ -149,43 +160,43 @@ function addEmployee(){
 }
 
 
-function createTeam(data){
-    const role = data.role
+// function createTeam(data){
+//     const role = data.role
 
-    if(role === 'Manager'){
-        inquirer.prompt(managerQs)
-            .then(function(answer){
+//     if(role === 'Manager'){
+//         inquirer.prompt(managerQs)
+//             .then(function(answer){
             
-                let manager = new Manager(name, id, email, office);
-                console.log(manager)
-                // arrayManagers.push(manager);
-            })
-    } 
-    else if (role === 'Engineer'){
-        inquirer.prompt(engineerQs)
-            .then(function(answer){
-                const name = answer.name
-                const id = answer.id
-                const email = answer.email
-                const github = answer.github
+//                 let manager = new Manager(name, id, email, office);
+//                 console.log(manager)
+//                 // arrayManagers.push(manager);
+//             })
+//     } 
+//     else if (role === 'Engineer'){
+//         inquirer.prompt(engineerQs)
+//             .then(function(answer){
+//                 const name = answer.name
+//                 const id = answer.id
+//                 const email = answer.email
+//                 const github = answer.github
 
-                let engineer = new Engineer(name, id, email, github);
-                arrayEngineers.push(engineer);
-            })
-    }
-    else if (role === 'Intern'){
-        inquirer.prompt(internQs)
-            .then(function(answer){
-                const name = answer.name
-                const id = answer.id
-                const email = answer.email
-                const school = answer.school
+//                 let engineer = new Engineer(name, id, email, github);
+//                 arrayEngineers.push(engineer);
+//             })
+//     }
+//     else if (role === 'Intern'){
+//         inquirer.prompt(internQs)
+//             .then(function(answer){
+//                 const name = answer.name
+//                 const id = answer.id
+//                 const email = answer.email
+//                 const school = answer.school
 
-                let intern = new Intern(name, id, email, school)
-                arrayInterns.push(intern);
-            })
-    }
-}
+//                 let intern = new Intern(name, id, email, school)
+//                 arrayInterns.push(intern);
+//             })
+//     }
+// }
 
 function init(){
 
@@ -195,7 +206,7 @@ function init(){
 
             // Ask for the employee's role
             if (data.start === 'Yes'){
-                addManager(data);
+                addManager();
             } 
 
             //if the user chooses to not start the program
